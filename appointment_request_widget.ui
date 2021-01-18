@@ -91,6 +91,32 @@
     <string>Fmt: h{1,2}:m{1,2}:s{1,2}</string>
    </property>
   </widget>
+  <widget class="QLabel" name="interval_end_label">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>60</y>
+     <width>81</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Interval end:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="interval_end">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>80</y>
+     <width>171</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Fmt: h{1,2}:m{1,2}:s{1,2}</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

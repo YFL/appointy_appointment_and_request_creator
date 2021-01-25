@@ -117,6 +117,32 @@
     <string>Fmt: h{1,2}:m{1,2}:s{1,2}</string>
    </property>
   </widget>
+  <widget class="QLabel" name="service_id_label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>120</y>
+     <width>61</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Service ID:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="service_id">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>140</y>
+     <width>411</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>The Object ID of the service</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

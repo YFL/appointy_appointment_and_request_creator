@@ -12,3 +12,9 @@ AppointmentWidget::~AppointmentWidget()
 {
     delete ui;
 }
+
+bool AppointmentWidget::is_empty() noexcept
+{
+    return ui->date->text().isEmpty() && ui->end->text().isEmpty() &&
+           ui->start->text().isEmpty();// && ui->
+}

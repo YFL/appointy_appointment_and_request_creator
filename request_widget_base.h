@@ -16,7 +16,7 @@ public:
     virtual auto is_empty() noexcept -> bool = 0;
     virtual auto clear() noexcept -> void = 0;
     /**
-     * @brief validate must throw an appointy::Exception if contents of the widget are not valid and a meaningful message return otherwise
+     * @brief validate must throw an appointy::Exception with a meaningful message if contents of the widget are not valid
      */
     virtual auto validate() -> void = 0;
     virtual auto to_json() -> std::string = 0;

@@ -65,7 +65,7 @@
     <string>Format: h{1,2}:m{1,2}:s{1,2}</string>
    </property>
   </widget>
-  <widget class="QWidget" name="widget" native="true">
+  <widget class="RequestWidgetBase" name="appointment_request_widget" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -102,6 +102,14 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RequestWidgetBase</class>
+   <extends>QWidget</extends>
+   <header>request_widget_base.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

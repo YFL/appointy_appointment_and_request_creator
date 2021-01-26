@@ -14,19 +14,25 @@ SOURCES += \
     appointment_widget.cc \
     main.cc \
     main_window.cc \
-    request_widget_base.cc
+    question_display_widget.cc \
+    request_widget_base.cc \
+    service_configurator_widget.cc
 
 HEADERS += \
     ../service_creator/util.h \
     appointment_request_widget.h \
     appointment_widget.h \
     main_window.h \
-    request_widget_base.h
+    question_display_widget.h \
+    request_widget_base.h \
+    service_configurator_widget.h
 
 FORMS += \
     appointment_request_widget.ui \
     appointment_widget.ui \
-    main_window.ui
+    main_window.ui \
+    question_display_widget.ui \
+    service_configurator_widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

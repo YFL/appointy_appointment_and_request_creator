@@ -7,7 +7,8 @@
 #include <QSpinBox>
 
 #include <appointy_exception.h>
-#include <option.h>
+#include <choice_answer.h>
+#include <choice_answer_signature.h>
 #include <numeric_answer_signature.h>
 
 auto create_numeric_answer_widget(const appointy::AnswerSignature &answer_signature)
@@ -106,25 +107,17 @@ QuestionDisplayWidget::~QuestionDisplayWidget()
 
 auto QuestionDisplayWidget::answer() const -> std::unique_ptr<appointy::Answer>
 {
-    switch((appointy::AnswerSignatureType::Type)question.answer_signature->type)
+    auto type = (appointy::AnswerSignatureType)question.answer_signature->type;
+    if(type == appointy::AnswerSignatureType::MANY ||
+       type == appointy::AnswerSignatureType::SINGLE)
     {
-        case appointy::AnswerSignatureType::MANY:
-            if(check_choice(dynamic_cast<QHBoxLayout *>(ui->answers_scroll_area->widget()->layout()), *question.answer_signature))
-            {
+        if(check_choice(dynamic_cast<QHBoxLayout *>(ui->answers->layout()), *question.answer_signature))
+        {
 
-            }
-            break;
-        case appointy::AnswerSignatureType::SINGLE:
-            if(check_choice(dynamic_cast<QHBoxLayout *>(ui->answers_scroll_area->widget()->layout()), *question.answer_signature)))
-            {
-
-            }
-            break;
-        case appointy::AnswerSignatureType::INT:
-
-            break;
-        case appointy::AnswerSignatureType::DOUBLE:
-
-            break;
+        }
+    }
+    else
+    {
+        ui->answers->layout()->addWidget(create_numeric_answer_widget(*question.answer_signature));
     }
 }

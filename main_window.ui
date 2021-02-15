@@ -37,7 +37,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="RequestWidgetBase" name="request_widget" native="true">
+   <widget class="QWidget" name="request_widget" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -77,14 +77,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>RequestWidgetBase</class>
-   <extends>QWidget</extends>
-   <header>request_widget_base.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

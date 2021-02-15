@@ -8,6 +8,8 @@
 #include <service.h>
 #include <answer.h>
 
+#include <question_display_widget.h>
+
 namespace Ui {
 class ServiceConfiguratorWidget;
 }
@@ -23,9 +25,15 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
+    void on_next_btn_clicked();
+
+    void on_prev_btn_clicked();
+
 private:
     std::unique_ptr<appointy::Service> _service;
     std::vector<std::shared_ptr<appointy::Answer>> _answers;
+    std::vector<QuestionDisplayWidget *> question_widgets;
+    size_t current_question_index;
 
 private:
     Ui::ServiceConfiguratorWidget *ui;

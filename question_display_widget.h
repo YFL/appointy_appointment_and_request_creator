@@ -19,7 +19,7 @@ public:
     ~QuestionDisplayWidget();
 
 public:
-    auto answer() const -> std::unique_ptr<appointy::Answer>;
+    auto answer() const -> std::shared_ptr<appointy::Answer>;
 
 private:
     Ui::QuestionDisplayWidget *ui;

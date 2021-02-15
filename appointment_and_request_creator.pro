@@ -12,6 +12,7 @@ SOURCES += \
     ../service_creator/util.cc \
     appointment_request_widget.cc \
     appointment_widget.cc \
+    id_radio_button.cc \
     main.cc \
     main_window.cc \
     question_display_widget.cc \
@@ -22,6 +23,7 @@ HEADERS += \
     ../service_creator/util.h \
     appointment_request_widget.h \
     appointment_widget.h \
+    id_radio_button.h \
     main_window.h \
     question_display_widget.h \
     request_widget_base.h \

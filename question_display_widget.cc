@@ -3,13 +3,15 @@
 
 #include <QDoubleSpinBox>
 #include <QCheckBox>
-#include <QRadioButton>
 #include <QSpinBox>
 
 #include <appointy_exception.h>
 #include <choice_answer.h>
 #include <choice_answer_signature.h>
+#include <numeric_answer.h>
 #include <numeric_answer_signature.h>
+
+#include <id_radio_button.h>
 
 auto create_numeric_answer_widget(const appointy::AnswerSignature &answer_signature)
 {
@@ -74,7 +76,7 @@ auto check_choice(const QHBoxLayout * const layout, const appointy::AnswerSignat
     {
         if(answer_signature.type == appointy::AnswerSignatureType::SINGLE)
         {
-            auto *rb = dynamic_cast<QRadioButton *>(layout->itemAt(i)->widget());
+            auto *rb = dynamic_cast<IDRadioButton *>(layout->itemAt(i)->widget());
             if(rb->isChecked())
             {
                 return true;
@@ -92,6 +94,21 @@ auto check_choice(const QHBoxLayout * const layout, const appointy::AnswerSignat
     return answer_signature.type == appointy::AnswerSignatureType::SINGLE ? true : false;
 }
 
+auto get_choices(const QHBoxLayout * const layout)
+{
+    std::vector<uint32_t> ids;
+    for(int i = 0; i < layout->count(); i++)
+    {
+        auto &btn = dynamic_cast<IDRadioButton &>(*layout->itemAt(i));
+        if(btn.isChecked())
+        {
+            ids.push_back(btn.id());
+        }
+    }
+
+    return ids;
+}
+
 QuestionDisplayWidget::QuestionDisplayWidget(const appointy::Question &question, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QuestionDisplayWidget),
@@ -105,7 +122,7 @@ QuestionDisplayWidget::~QuestionDisplayWidget()
     delete ui;
 }
 
-auto QuestionDisplayWidget::answer() const -> std::unique_ptr<appointy::Answer>
+auto QuestionDisplayWidget::answer() const -> std::shared_ptr<appointy::Answer>
 {
     auto type = (appointy::AnswerSignatureType)question.answer_signature->type;
     if(type == appointy::AnswerSignatureType::MANY ||
@@ -113,11 +130,19 @@ auto QuestionDisplayWidget::answer() const -> std::unique_ptr<appointy::Answer>
     {
         if(check_choice(dynamic_cast<QHBoxLayout *>(ui->answers->layout()), *question.answer_signature))
         {
-
+            return std::shared_ptr<appointy::Answer> {new appointy::ChoiceAnswer {0, question.answer_signature->id, get_choices(dynamic_cast<QHBoxLayout *>(ui->answers->layout()))}};
         }
+
+        return nullptr;
     }
-    else
+    else if(type == appointy::AnswerSignatureType::INT)
     {
-        ui->answers->layout()->addWidget(create_numeric_answer_widget(*question.answer_signature));
+        return std::shared_ptr<appointy::Answer> {new appointy::NumericAnswer<int> {0, question.answer_signature->id, dynamic_cast<QSpinBox &>(*ui->answers->layout()->itemAt(0)).value()}};
     }
+    else if(type == appointy::AnswerSignatureType::DOUBLE)
+    {
+        return std::shared_ptr<appointy::Answer> {new appointy::NumericAnswer<double> {0, question.answer_signature->id, dynamic_cast<QDoubleSpinBox &>(*ui->answers->layout()->itemAt(0)).value()}};
+    }
+
+    return nullptr;
 }

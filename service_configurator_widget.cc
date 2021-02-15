@@ -41,17 +41,47 @@ void ServiceConfiguratorWidget::on_actionOpen_triggered()
         auto ss = std::stringstream {};
         while(std::getline(file, line))
         {
-            ss << line << "\n";
+            ss << line;
         }
 
         try
         {
             _service = std::unique_ptr<appointy::Service> {new appointy::Service {appointy::JSON_Parser::parse_service({ss.str()})}};
             _answers.clear();
+            question_widgets.clear();
+            for(auto &question : _service->questions)
+            {
+                question_widgets.push_back(new QuestionDisplayWidget {question, this});
+            }
+            current_question_index = 0;
+            ui->question_widget = question_widgets[current_question_index];
         }
         catch(const appointy::Exception &e)
         {
             show_error_with_ok("File contents erronous", e.what());
         }
     }
+}
+
+void ServiceConfiguratorWidget::on_next_btn_clicked()
+{
+    auto answer = dynamic_cast<QuestionDisplayWidget *>(ui->question_widget)->answer();
+    if(answer)
+    {
+        _answers[current_question_index++] = answer;
+        if(current_question_index == question_widgets.size())
+        {
+            ui->next_btn->setEnabled(false);
+        }
+        ui->question_widget = question_widgets[current_question_index];
+    }
+    else
+    {
+        show_error_with_ok("You didn't answer the question", "");
+    }
+}
+
+void ServiceConfiguratorWidget::on_prev_btn_clicked()
+{
+    ui->question_widget = question
 }

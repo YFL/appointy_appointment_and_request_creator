@@ -9,6 +9,7 @@
 #include <answer.h>
 
 #include <question_display_widget.h>
+#include <service_selector_window.h>
 
 namespace Ui {
 class ServiceConfiguratorWidget;
@@ -29,11 +30,19 @@ private slots:
 
     void on_prev_btn_clicked();
 
+    void on_service_selected(const appointy::Service &service);
+
+    void on_answer_apply();
+
+private:
+    auto change_service_and_show_first_question_if_any(const appointy::Service &service) -> void;
+
 private:
     std::unique_ptr<appointy::Service> _service;
     std::vector<std::shared_ptr<appointy::Answer>> _answers;
     std::vector<QuestionDisplayWidget *> question_widgets;
     size_t current_question_index;
+    ServiceSelectorWindow *service_selector;
 
 private:
     Ui::ServiceConfiguratorWidget *ui;

@@ -2,8 +2,8 @@
 #include "ui_service_configurator_widget.h"
 
 #include <fstream>
-#include <string>
 #include <sstream>
+#include <string>
 
 #include <QFileDialog>
 
@@ -15,6 +15,7 @@
 ServiceConfiguratorWidget::ServiceConfiguratorWidget(QWidget *parent) :
     QMainWindow(parent),
     _service {nullptr},
+    service_selector {nullptr},
     ui(new Ui::ServiceConfiguratorWidget)
 {
     ui->setupUi(this);
@@ -58,21 +59,22 @@ void ServiceConfiguratorWidget::on_actionOpen_triggered()
                 services.reserve(jsn.size());
                 for(auto &service : jsn)
                 {
-                    services.push_back(appointy::JSON_Parser::parse_service(service.dump()));
+                    services.push_back(appointy::JSON_Parser::parse_service(service));
                 }
+                service_selector = new ServiceSelectorWindow {services, this};
+                connect(service_selector, &ServiceSelectorWindow::selected, this, &ServiceConfiguratorWidget::on_service_selected);
+                service_selector->show();
+                return;
+            }
 
-            }
-            _service = std::unique_ptr<appointy::Service> {new appointy::Service {appointy::JSON_Parser::parse_service({ss.str()})}};
-            _answers.clear();
-            question_widgets.clear();
-            for(auto &question : _service->questions)
-            {
-                question_widgets.push_back(new QuestionDisplayWidget {question, this});
-            }
-            current_question_index = 0;
-            ui->question_widget = question_widgets[current_question_index];
+            // if the json contains only one service this runs
+            change_service_and_show_first_question_if_any(appointy::JSON_Parser::parse_service({ss.str()}));
         }
         catch(const appointy::Exception &e)
+        {
+            show_error_with_ok("File contents erronous", e.what());
+        }
+        catch(const nlohmann::detail::parse_error &e)
         {
             show_error_with_ok("File contents erronous", e.what());
         }
@@ -81,24 +83,63 @@ void ServiceConfiguratorWidget::on_actionOpen_triggered()
 
 void ServiceConfiguratorWidget::on_next_btn_clicked()
 {
-    auto answer = dynamic_cast<QuestionDisplayWidget *>(ui->question_widget)->answer();
-    if(answer)
+    current_question_index++;
+    if(current_question_index + 1 == question_widgets.size())
     {
-        _answers[current_question_index++] = answer;
-        if(current_question_index == question_widgets.size())
-        {
-            ui->next_btn->setEnabled(false);
-        }
-        ui->question_widget = question_widgets[current_question_index];
+        ui->next_btn->setEnabled(false);
+        current_question_index--;
     }
-    else
+    else if(!ui->next_btn->isEnabled())
     {
-        show_error_with_ok("You didn't answer the question", "");
+        ui->next_btn->setEnabled(true);
     }
+    ui->question_widget->hide();
+    ui->question_widget = question_widgets[current_question_index];
+    ui->question_widget->show();
 }
 
 void ServiceConfiguratorWidget::on_prev_btn_clicked()
 {
     --current_question_index;
+    if(current_question_index < 1)
+    {
+        ui->prev_btn->setEnabled(false);
+        current_question_index++;
+    }
+    else if(!ui->prev_btn->isEnabled())
+    {
+        ui->prev_btn->setEnabled(true);
+    }
     ui->question_widget = question_widgets[current_question_index];
+    ui->question_widget->show();
+}
+
+void ServiceConfiguratorWidget::on_service_selected(const appointy::Service &service)
+{
+    change_service_and_show_first_question_if_any(service);
+    delete service_selector;
+}
+
+void ServiceConfiguratorWidget::on_answer_apply()
+{
+    _answers[current_question_index] = dynamic_cast<QuestionDisplayWidget &>(*ui->question_widget).answer();
+}
+
+void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(const appointy::Service &service)
+{
+    _service = std::unique_ptr<appointy::Service> { new appointy::Service {service}};
+    _answers.clear();
+    _answers.reserve(_service->questions.size());
+    question_widgets.clear();
+    if(_service->questions.size() > 0)
+    {
+        for(auto &question : _service->questions)
+        {
+            question_widgets.push_back(new QuestionDisplayWidget {question, this});
+            connect(question_widgets.back(), &QuestionDisplayWidget::apply, this, &ServiceConfiguratorWidget::on_answer_apply);
+        }
+        current_question_index = 0;
+        ui->question_widget = question_widgets[current_question_index];
+        ui->question_widget->show();
+    }
 }

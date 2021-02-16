@@ -35,7 +35,7 @@
      <x>0</x>
      <y>130</y>
      <width>801</width>
-     <height>441</height>
+     <height>391</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -47,11 +47,24 @@
       <x>0</x>
       <y>0</y>
       <width>797</width>
-      <height>437</height>
+      <height>387</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout"/>
    </widget>
+  </widget>
+  <widget class="QPushButton" name="apply_btn">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>530</y>
+     <width>88</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Apply</string>
+   </property>
   </widget>
  </widget>
  <resources/>

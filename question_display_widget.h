@@ -18,8 +18,14 @@ public:
     explicit QuestionDisplayWidget(const appointy::Question &question, QWidget *parent = nullptr);
     ~QuestionDisplayWidget();
 
+signals:
+    void apply();
+
 public:
     auto answer() const -> std::shared_ptr<appointy::Answer>;
+
+private slots:
+    void on_apply_btn_clicked();
 
 private:
     Ui::QuestionDisplayWidget *ui;

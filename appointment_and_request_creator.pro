@@ -17,7 +17,8 @@ SOURCES += \
     main_window.cc \
     question_display_widget.cc \
     request_widget_base.cc \
-    service_configurator_widget.cc
+    service_configurator_widget.cc \
+    service_selector_window.cc
 
 HEADERS += \
     ../service_creator/util.h \
@@ -27,14 +28,16 @@ HEADERS += \
     main_window.h \
     question_display_widget.h \
     request_widget_base.h \
-    service_configurator_widget.h
+    service_configurator_widget.h \
+    service_selector_window.h
 
 FORMS += \
     appointment_request_widget.ui \
     appointment_widget.ui \
     main_window.ui \
     question_display_widget.ui \
-    service_configurator_widget.ui
+    service_configurator_widget.ui \
+    service_selector_window.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -42,6 +45,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 unix:!macx: LIBS += -L$$PWD/../appointy/build/appointy/Debug/bin/ -lappointy
+unix:!macx: LIBS += -lmongocxx
 
 INCLUDEPATH += $$PWD/../appointy/src
 INCLUDEPATH += $$PWD/../appointy/src/util

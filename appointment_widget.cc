@@ -13,8 +13,23 @@ AppointmentWidget::~AppointmentWidget()
     delete ui;
 }
 
-bool AppointmentWidget::is_empty() noexcept
+auto AppointmentWidget::is_empty() noexcept -> bool
 {
     return ui->date->text().isEmpty() && ui->end->text().isEmpty() &&
-           ui->start->text().isEmpty();// && ui->
+            ui->start->text().isEmpty();// && ui->
+}
+
+auto AppointmentWidget::clear() noexcept -> void
+{
+
+}
+
+auto AppointmentWidget::validate() -> void
+{
+
+}
+
+auto AppointmentWidget::to_json() -> std::string
+{
+    return {};
 }

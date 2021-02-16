@@ -71,3 +71,5 @@ Thumbs.db
 *.dll
 *.exe
 
+appointment_and_request_creator
+moc*

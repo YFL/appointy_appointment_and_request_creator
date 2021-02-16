@@ -8,6 +8,7 @@
 #include <QFileDialog>
 
 #include <json_parser.h>
+#include <nlohmann/json.hpp>
 
 #include "../service_creator/util.h"
 
@@ -26,16 +27,20 @@ ServiceConfiguratorWidget::~ServiceConfiguratorWidget()
 
 void ServiceConfiguratorWidget::on_actionOpen_triggered()
 {
+    using nlohmann::json;
+
     auto fod = QFileDialog {};
     fod.setAcceptMode(QFileDialog::AcceptMode::AcceptOpen);
     fod.setDefaultSuffix("json");
-    fod.setDirectory("./");
+    //fod.setDirectory("./");
     fod.setFileMode(QFileDialog::FileMode::ExistingFile);
     fod.setNameFilter("JSON files (*.json)");
     fod.setViewMode(QFileDialog::ViewMode::Detail);
     if(fod.exec())
     {
-        auto selected_file = fod.selectedFiles()[0];
+        // when I used fod.selectedFiles()[0] I got a warning that I shuoldnt use operator[]() on a temporary QList object
+        auto selected_files = fod.selectedFiles();
+        auto selected_file = selected_files[0];
         auto file = std::ifstream {selected_file.toStdString()};
         auto line = std::string {};
         auto ss = std::stringstream {};
@@ -46,6 +51,17 @@ void ServiceConfiguratorWidget::on_actionOpen_triggered()
 
         try
         {
+            auto jsn = json::parse(ss.str());
+            if(jsn.is_array())
+            {
+                std::vector<appointy::Service> services;
+                services.reserve(jsn.size());
+                for(auto &service : jsn)
+                {
+                    services.push_back(appointy::JSON_Parser::parse_service(service.dump()));
+                }
+
+            }
             _service = std::unique_ptr<appointy::Service> {new appointy::Service {appointy::JSON_Parser::parse_service({ss.str()})}};
             _answers.clear();
             question_widgets.clear();
@@ -83,5 +99,6 @@ void ServiceConfiguratorWidget::on_next_btn_clicked()
 
 void ServiceConfiguratorWidget::on_prev_btn_clicked()
 {
-    ui->question_widget = question
+    --current_question_index;
+    ui->question_widget = question_widgets[current_question_index];
 }

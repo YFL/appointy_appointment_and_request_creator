@@ -103,7 +103,7 @@ auto check_choice(const QLayout * const layout, const appointy::AnswerSignature 
             }
         }
     }
-    return answer_signature.type == appointy::AnswerSignatureType::SINGLE ? true : false;
+    return answer_signature.type == appointy::AnswerSignatureType::SINGLE ? false : true;
 }
 
 auto get_choices(const QLayout * const layout)

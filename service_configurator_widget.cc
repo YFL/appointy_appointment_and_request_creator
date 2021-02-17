@@ -87,11 +87,10 @@ void ServiceConfiguratorWidget::on_next_btn_clicked()
     if(current_question_index + 1 == question_widgets.size())
     {
         ui->next_btn->setEnabled(false);
-        current_question_index--;
     }
-    else if(!ui->next_btn->isEnabled())
+    if(!ui->prev_btn->isEnabled())
     {
-        ui->next_btn->setEnabled(true);
+        ui->prev_btn->setEnabled(true);
     }
     ui->question_widget->hide();
     ui->question_widget = question_widgets[current_question_index];
@@ -100,16 +99,16 @@ void ServiceConfiguratorWidget::on_next_btn_clicked()
 
 void ServiceConfiguratorWidget::on_prev_btn_clicked()
 {
-    --current_question_index;
+    current_question_index--;
     if(current_question_index < 1)
     {
         ui->prev_btn->setEnabled(false);
-        current_question_index++;
     }
-    else if(!ui->prev_btn->isEnabled())
+    else if(!ui->next_btn->isEnabled())
     {
-        ui->prev_btn->setEnabled(true);
+        ui->next_btn->setEnabled(true);
     }
+    ui->question_widget->hide();
     ui->question_widget = question_widgets[current_question_index];
     ui->question_widget->show();
 }
@@ -122,14 +121,30 @@ void ServiceConfiguratorWidget::on_service_selected(const appointy::Service &ser
 
 void ServiceConfiguratorWidget::on_answer_apply()
 {
-    _answers[current_question_index] = dynamic_cast<QuestionDisplayWidget &>(*ui->question_widget).answer();
+    auto answer = dynamic_cast<QuestionDisplayWidget &>(*ui->question_widget).answer();
+    if(!answer)
+    {
+        show_error_with_ok("The answer is not filled out correctly", "");
+    }
+    else
+    {
+        _answers[current_question_index] = answer;
+    }
 }
 
 void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(const appointy::Service &service)
 {
+    if(!dynamic_cast<QuestionDisplayWidget *>(ui->question_widget))
+    {
+        delete ui->question_widget;
+    }
     _service = std::unique_ptr<appointy::Service> { new appointy::Service {service}};
     _answers.clear();
-    _answers.reserve(_service->questions.size());
+    _answers.resize(_service->questions.size());
+    for(QWidget *w : question_widgets)
+    {
+        delete w;
+    }
     question_widgets.clear();
     if(_service->questions.size() > 0)
     {
@@ -141,5 +156,10 @@ void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(co
         current_question_index = 0;
         ui->question_widget = question_widgets[current_question_index];
         ui->question_widget->show();
+    }
+    ui->prev_btn->setEnabled(false);
+    if(_service->questions.size() == 1)
+    {
+        ui->next_btn->setEnabled(false);
     }
 }

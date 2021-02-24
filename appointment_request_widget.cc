@@ -84,7 +84,6 @@ std::string AppointmentRequestWidget::to_json()
 {
     validate();
     return appointy::AppointmentRequest {
-        {""},
         string_to_date(ui->first_date->text().toStdString()),
         string_to_date(ui->last_date->text().toStdString()),
         string_to_time(ui->interval_start->text().toStdString()),

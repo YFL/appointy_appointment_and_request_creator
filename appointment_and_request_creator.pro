@@ -46,13 +46,11 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix:!macx: LIBS += -L$$PWD/../appointy/build/appointy/Debug/bin/ -lappointy
-unix:!macx: LIBS += -lmongocxx
+unix:!macx: LIBS += -L$$PWD/../appointy/build/appointy_base/Debug/bin/ -lappointy_base
 
-INCLUDEPATH += $$PWD/../appointy/src
-INCLUDEPATH += $$PWD/../appointy/src/util
-INCLUDEPATH += $$PWD/../appointy/src/appointment
-INCLUDEPATH += $$PWD/../appointy/src/service
+INCLUDEPATH += $$PWD/../appointy/appointy_base/include/util
+INCLUDEPATH += $$PWD/../appointy/appointy_base/include/appointment
+INCLUDEPATH += $$PWD/../appointy/appointy_base/include/service
 INCLUDEPATH += $$PWD/../appointy/ext/json/include
 INCLUDEPATH += $$PWD/../appointy/ext/json/include/nlohmann
-DEPENDPATH += $$PWD/../appointy/src
+DEPENDPATH += $$PWD/../appointy/appointy_base/

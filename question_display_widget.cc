@@ -164,18 +164,18 @@ auto QuestionDisplayWidget::answer() const -> std::shared_ptr<appointy::Answer>
     {
         if(check_choice(ui->answers->layout(), *question.answer_signature))
         {
-            return std::shared_ptr<appointy::Answer> {new appointy::ChoiceAnswer {0, question.answer_signature->id, get_choices(ui->answers->layout())}};
+            return std::shared_ptr<appointy::Answer> {new appointy::ChoiceAnswer {question.answer_signature->id, get_choices(ui->answers->layout())}};
         }
 
         return nullptr;
     }
     else if(type == appointy::AnswerSignatureType::INT)
     {
-        return std::shared_ptr<appointy::Answer> {new appointy::NumericAnswer<int> {0, question.answer_signature->id, dynamic_cast<QSpinBox &>(*ui->answers->layout()->itemAt(0)->widget()).value()}};
+        return std::shared_ptr<appointy::Answer> {new appointy::NumericAnswer<int> {question.answer_signature->id, dynamic_cast<QSpinBox &>(*ui->answers->layout()->itemAt(0)->widget()).value()}};
     }
     else if(type == appointy::AnswerSignatureType::DOUBLE)
     {
-        return std::shared_ptr<appointy::Answer> {new appointy::NumericAnswer<double> {0, question.answer_signature->id, dynamic_cast<QDoubleSpinBox &>(*ui->answers->layout()->itemAt(0)->widget()).value()}};
+        return std::shared_ptr<appointy::Answer> {new appointy::NumericAnswer<double> {question.answer_signature->id, dynamic_cast<QDoubleSpinBox &>(*ui->answers->layout()->itemAt(0)->widget()).value()}};
     }
 
     return nullptr;

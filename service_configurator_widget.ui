@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>643</height>
+    <height>804</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>170</y>
       <width>801</width>
       <height>571</height>
      </rect>
@@ -28,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>570</y>
+      <y>740</y>
       <width>88</width>
       <height>34</height>
      </rect>
@@ -41,7 +41,7 @@
     <property name="geometry">
      <rect>
       <x>710</x>
-      <y>570</y>
+      <y>740</y>
       <width>88</width>
       <height>34</height>
      </rect>
@@ -49,6 +49,111 @@
     <property name="text">
      <string>Next</string>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>371</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Date and time preference</string>
+    </property>
+    <widget class="QDateEdit" name="first_date">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>114</width>
+       <height>32</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTimeEdit" name="interval_start">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>50</y>
+       <width>118</width>
+       <height>32</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="first_date_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>58</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>First date</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="last_date_label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>58</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Last date</string>
+     </property>
+    </widget>
+    <widget class="QDateEdit" name="last_date">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>114</width>
+       <height>32</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="interval_start_label">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>30</y>
+       <width>81</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Interval start</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="interval_end_label">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>90</y>
+       <width>81</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Interval end</string>
+     </property>
+    </widget>
+    <widget class="QTimeEdit" name="interval_end">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>110</y>
+       <width>118</width>
+       <height>32</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

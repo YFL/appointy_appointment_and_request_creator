@@ -92,9 +92,8 @@ void ServiceConfiguratorWidget::on_next_btn_clicked()
     {
         ui->prev_btn->setEnabled(true);
     }
-    ui->question_widget->hide();
-    ui->question_widget = question_widgets[current_question_index];
-    ui->question_widget->show();
+    question_widgets[current_question_index - 1]->hide();
+    question_widgets[current_question_index]->show();
 }
 
 void ServiceConfiguratorWidget::on_prev_btn_clicked()
@@ -108,9 +107,8 @@ void ServiceConfiguratorWidget::on_prev_btn_clicked()
     {
         ui->next_btn->setEnabled(true);
     }
-    ui->question_widget->hide();
-    ui->question_widget = question_widgets[current_question_index];
-    ui->question_widget->show();
+    question_widgets[current_question_index + 1]->hide();
+    question_widgets[current_question_index]->show();
 }
 
 void ServiceConfiguratorWidget::on_service_selected(const appointy::Service &service)
@@ -134,10 +132,6 @@ void ServiceConfiguratorWidget::on_answer_apply()
 
 void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(const appointy::Service &service)
 {
-    if(!dynamic_cast<QuestionDisplayWidget *>(ui->question_widget))
-    {
-        delete ui->question_widget;
-    }
     _service = std::unique_ptr<appointy::Service> { new appointy::Service {service}};
     _answers.clear();
     _answers.resize(_service->questions.size());
@@ -150,12 +144,11 @@ void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(co
     {
         for(auto &question : _service->questions)
         {
-            question_widgets.push_back(new QuestionDisplayWidget {question, this});
+            question_widgets.push_back(new QuestionDisplayWidget {question, ui->question_widget});
             connect(question_widgets.back(), &QuestionDisplayWidget::apply, this, &ServiceConfiguratorWidget::on_answer_apply);
         }
         current_question_index = 0;
-        ui->question_widget = question_widgets[current_question_index];
-        ui->question_widget->show();
+        question_widgets[current_question_index]->show();
     }
     ui->prev_btn->setEnabled(false);
     if(_service->questions.size() == 1)

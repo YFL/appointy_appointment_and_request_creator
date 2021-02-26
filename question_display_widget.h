@@ -22,6 +22,9 @@ signals:
     void apply();
 
 public:
+    auto question() const -> appointy::Question;
+
+public:
     auto answer() const -> std::shared_ptr<appointy::Answer>;
 
 private slots:
@@ -29,7 +32,7 @@ private slots:
 
 private:
     Ui::QuestionDisplayWidget *ui;
-    const appointy::Question question;
+    const appointy::Question _question;
 };
 
 #endif // QUESTION_DISPLAY_WIDGET_H

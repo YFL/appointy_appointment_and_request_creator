@@ -8,6 +8,8 @@
 #include <QFileDialog>
 
 #include <json_parser.h>
+#include <choice_answer.h>
+
 #include <nlohmann/json.hpp>
 
 #include "../service_creator/util.h"
@@ -39,7 +41,7 @@ void ServiceConfiguratorWidget::on_actionOpen_triggered()
     fod.setViewMode(QFileDialog::ViewMode::Detail);
     if(fod.exec())
     {
-        // when I used fod.selectedFiles()[0] I got a warning that I shuoldnt use operator[]() on a temporary QList object
+        // when I used fod.selectedFiles()[0] I got a warning that I shouldnt use operator[]() on a temporary QList object
         auto selected_files = fod.selectedFiles();
         auto selected_file = selected_files[0];
         auto file = std::ifstream {selected_file.toStdString()};
@@ -119,7 +121,7 @@ void ServiceConfiguratorWidget::on_service_selected(const appointy::Service &ser
 
 void ServiceConfiguratorWidget::on_answer_apply()
 {
-    auto answer = dynamic_cast<QuestionDisplayWidget &>(*ui->question_widget).answer();
+    auto answer = dynamic_cast<QuestionDisplayWidget &>(*question_widgets[current_question_index]).answer();
     if(!answer)
     {
         show_error_with_ok("The answer is not filled out correctly", "");
@@ -154,5 +156,96 @@ void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(co
     if(_service->questions.size() == 1)
     {
         ui->next_btn->setEnabled(false);
+    }
+}
+
+void ServiceConfiguratorWidget::on_actionReset_triggered()
+{
+    change_service_and_show_first_question_if_any(*_service);
+}
+
+void ServiceConfiguratorWidget::on_actionSave_as_triggered()
+{
+    if(_service)
+    {
+        try
+        {
+            auto first_date = string_to_date(ui->first_date->text().toStdString());
+            try
+            {
+                auto last_date = string_to_date(ui->last_date->text().toStdString());
+
+                auto qtime = ui->interval_start->time();
+                try
+                {
+                    auto interval_start = appointy::Time {qtime.hour(), qtime.minute(), qtime.second()};
+                    qtime = ui->interval_end->time();
+                    try
+                    {
+                        auto interval_end = appointy::Time {qtime.hour(), qtime.minute(), qtime.second()};
+
+                        auto json = "{}"_json;
+                        json["first_date"] = first_date.to_json();
+                        json["last_date"] = last_date.to_json();
+                        json["interval_start"] = interval_start.to_json();
+                        json["interval_end"] = interval_end.to_json();
+                        json["service_id"] = _service->id;
+                        json["answers"] = "[]"_json;
+
+                        for(auto i = 0ul; i < _answers.size(); i++)
+                        {
+                            if(_answers[i] == nullptr)
+                            {
+                                show_error_with_ok("One of the questions was not answered", "The text of the questions reads: " + question_widgets[i]->question().text);
+                                return;
+                            }
+                            json["answers"].push_back(_answers[i]->to_json());
+                        }
+
+                        auto fsd = QFileDialog {};
+                        fsd.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
+                        fsd.setDefaultSuffix("json");
+                        //fsd.setDirectory("./");
+                        fsd.setFileMode(QFileDialog::FileMode::AnyFile);
+                        fsd.setNameFilter("JSON files (*.json)");
+                        fsd.setViewMode(QFileDialog::ViewMode::Detail);
+                        if(fsd.exec())
+                        {
+                            auto selected_files = fsd.selectedFiles();
+                            auto selected_file = selected_files[0];
+                            auto file = std::ofstream {selected_file.toStdString()};
+                            if(file.is_open())
+                            {
+                                file << json;
+                            }
+                            else
+                            {
+                                show_error_with_ok("File couldn't be opened", "Dunno what caused it");
+                            }
+                        }
+                    }
+                    catch(const appointy::Exception &e)
+                    {
+                        show_error_with_ok("Illegal interval end", e.what());
+                    }
+                }
+                catch(const appointy::Exception &e)
+                {
+                    show_error_with_ok("Illegal interval start", e.what());
+                }
+            }
+            catch(const appointy::Exception &e)
+            {
+                show_error_with_ok("Illegal last date", e.what());
+            }
+        }
+        catch(const appointy::Exception &e)
+        {
+            show_error_with_ok("Illegal first date", e.what());
+        }
+    }
+    else
+    {
+        show_error_with_ok("No service loaded", "");
     }
 }

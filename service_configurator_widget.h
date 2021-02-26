@@ -34,6 +34,10 @@ private slots:
 
     void on_answer_apply();
 
+    void on_actionReset_triggered();
+
+    void on_actionSave_as_triggered();
+
 private:
     auto change_service_and_show_first_question_if_any(const appointy::Service &service) -> void;
 

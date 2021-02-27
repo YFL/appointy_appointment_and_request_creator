@@ -1,6 +1,8 @@
 #include "question_display_widget.h"
 #include "ui_question_display_widget.h"
 
+#include <iostream>
+
 #include <QDoubleSpinBox>
 #include <QCheckBox>
 #include <QSpinBox>

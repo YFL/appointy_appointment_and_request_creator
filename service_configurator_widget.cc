@@ -2,6 +2,7 @@
 #include "ui_service_configurator_widget.h"
 
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 

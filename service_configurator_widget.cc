@@ -2,7 +2,6 @@
 #include "ui_service_configurator_widget.h"
 
 #include <fstream>
-#include <iostream>
 #include <sstream>
 #include <string>
 
@@ -27,61 +26,6 @@ ServiceConfiguratorWidget::ServiceConfiguratorWidget(QWidget *parent) :
 ServiceConfiguratorWidget::~ServiceConfiguratorWidget()
 {
     delete ui;
-}
-
-void ServiceConfiguratorWidget::on_actionOpen_triggered()
-{
-    using nlohmann::json;
-
-    auto fod = QFileDialog {};
-    fod.setAcceptMode(QFileDialog::AcceptMode::AcceptOpen);
-    fod.setDefaultSuffix("json");
-    //fod.setDirectory("./");
-    fod.setFileMode(QFileDialog::FileMode::ExistingFile);
-    fod.setNameFilter("JSON files (*.json)");
-    fod.setViewMode(QFileDialog::ViewMode::Detail);
-    if(fod.exec())
-    {
-        // when I used fod.selectedFiles()[0] I got a warning that I shouldnt use operator[]() on a temporary QList object
-        auto selected_files = fod.selectedFiles();
-        auto selected_file = selected_files[0];
-        auto file = std::ifstream {selected_file.toStdString()};
-        auto line = std::string {};
-        auto ss = std::stringstream {};
-        while(std::getline(file, line))
-        {
-            ss << line;
-        }
-
-        try
-        {
-            auto jsn = json::parse(ss.str());
-            if(jsn.is_array())
-            {
-                std::vector<appointy::Service> services;
-                services.reserve(jsn.size());
-                for(auto &service : jsn)
-                {
-                    services.push_back(appointy::JSON_Parser::parse_service(service));
-                }
-                service_selector = new ServiceSelectorWindow {services, this};
-                connect(service_selector, &ServiceSelectorWindow::selected, this, &ServiceConfiguratorWidget::on_service_selected);
-                service_selector->show();
-                return;
-            }
-
-            // if the json contains only one service this runs
-            change_service_and_show_first_question_if_any(appointy::JSON_Parser::parse_service({ss.str()}));
-        }
-        catch(const appointy::Exception &e)
-        {
-            show_error_with_ok("File contents erronous", e.what());
-        }
-        catch(const nlohmann::detail::parse_error &e)
-        {
-            show_error_with_ok("File contents erronous", e.what());
-        }
-    }
 }
 
 void ServiceConfiguratorWidget::on_next_btn_clicked()
@@ -160,6 +104,19 @@ void ServiceConfiguratorWidget::change_service_and_show_first_question_if_any(co
     }
 }
 
+auto ServiceConfiguratorWidget::check_answers() noexcept -> std::optional<unsigned long>
+{
+    for(uint64_t i = 0; i < _answers.size(); i++)
+    {
+        if(_answers[i] == nullptr)
+        {
+            return i;
+        }
+    }
+
+    return std::nullopt;
+}
+
 void ServiceConfiguratorWidget::on_actionReset_triggered()
 {
     change_service_and_show_first_question_if_any(*_service);
@@ -169,84 +126,59 @@ void ServiceConfiguratorWidget::on_actionSave_as_triggered()
 {
     if(_service)
     {
-        try
+        auto json = "{}"_json;
+        json["service_id"] = _service->id;
+        json["answers"] = "[]"_json;
+
+        for(auto i = 0ul; i < _answers.size(); i++)
         {
-            auto first_date = string_to_date(ui->first_date->text().toStdString());
-            try
+            if(_answers[i] == nullptr)
             {
-                auto last_date = string_to_date(ui->last_date->text().toStdString());
-
-                auto qtime = ui->interval_start->time();
-                try
-                {
-                    auto interval_start = appointy::Time {qtime.hour(), qtime.minute(), qtime.second()};
-                    qtime = ui->interval_end->time();
-                    try
-                    {
-                        auto interval_end = appointy::Time {qtime.hour(), qtime.minute(), qtime.second()};
-
-                        auto json = "{}"_json;
-                        json["first_date"] = first_date.to_json();
-                        json["last_date"] = last_date.to_json();
-                        json["interval_start"] = interval_start.to_json();
-                        json["interval_end"] = interval_end.to_json();
-                        json["service_id"] = _service->id;
-                        json["answers"] = "[]"_json;
-
-                        for(auto i = 0ul; i < _answers.size(); i++)
-                        {
-                            if(_answers[i] == nullptr)
-                            {
-                                show_error_with_ok("One of the questions was not answered", "The text of the questions reads: " + question_widgets[i]->question().text);
-                                return;
-                            }
-                            json["answers"].push_back(_answers[i]->to_json());
-                        }
-
-                        auto fsd = QFileDialog {};
-                        fsd.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
-                        fsd.setDefaultSuffix("json");
-                        //fsd.setDirectory("./");
-                        fsd.setFileMode(QFileDialog::FileMode::AnyFile);
-                        fsd.setNameFilter("JSON files (*.json)");
-                        fsd.setViewMode(QFileDialog::ViewMode::Detail);
-                        if(fsd.exec())
-                        {
-                            auto selected_files = fsd.selectedFiles();
-                            auto selected_file = selected_files[0];
-                            auto file = std::ofstream {selected_file.toStdString()};
-                            if(file.is_open())
-                            {
-                                file << json;
-                            }
-                            else
-                            {
-                                show_error_with_ok("File couldn't be opened", "Dunno what caused it");
-                            }
-                        }
-                    }
-                    catch(const appointy::Exception &e)
-                    {
-                        show_error_with_ok("Illegal interval end", e.what());
-                    }
-                }
-                catch(const appointy::Exception &e)
-                {
-                    show_error_with_ok("Illegal interval start", e.what());
-                }
+                show_error_with_ok("One of the questions was not answered", "The text of the questions reads: " + question_widgets[i]->question().text);
+                return;
             }
-            catch(const appointy::Exception &e)
-            {
-                show_error_with_ok("Illegal last date", e.what());
-            }
+            json["answers"].push_back(_answers[i]->to_json());
         }
-        catch(const appointy::Exception &e)
+
+        auto fsd = QFileDialog {};
+        fsd.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
+        fsd.setDefaultSuffix("json");
+        //fsd.setDirectory("./");
+        fsd.setFileMode(QFileDialog::FileMode::AnyFile);
+        fsd.setNameFilter("JSON files (*.json)");
+        fsd.setViewMode(QFileDialog::ViewMode::Detail);
+        if(fsd.exec())
         {
-            show_error_with_ok("Illegal first date", e.what());
+            auto selected_files = fsd.selectedFiles();
+            auto selected_file = selected_files[0];
+            auto file = std::ofstream {selected_file.toStdString()};
+            if(file.is_open())
+            {
+                file << json;
+            }
+            else
+            {
+                show_error_with_ok("File couldn't be opened", "Dunno what caused it");
+            }
         }
     }
     else
     {
         show_error_with_ok("No service loaded", "");
+    }
+}
+
+void ServiceConfiguratorWidget::on_return_and_close_btn_clicked()
+{
+    if(_service)
+    {
+        auto i = check_answers();
+        if(i)
+        {
+            show_error_with_ok("One of the questions was not answered", "The text of the question reads: " + question_widgets[i.value()]->question().text);
+            return;
+        }
+        emit service_config_ready(_answers);
+        close();
     }
 }

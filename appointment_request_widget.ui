@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>400</height>
+    <height>209</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -117,30 +117,43 @@
     <string>Fmt: h{1,2}:m{1,2}:s{1,2}</string>
    </property>
   </widget>
-  <widget class="QLabel" name="service_id_label">
+  <widget class="QPushButton" name="load_services_btn">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>120</y>
-     <width>61</width>
-     <height>18</height>
+     <width>161</width>
+     <height>34</height>
     </rect>
    </property>
    <property name="text">
-    <string>Service ID:</string>
+    <string>Load services from JSON</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="service_id">
+  <widget class="QPushButton" name="select_service_btn">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>140</y>
-     <width>411</width>
-     <height>32</height>
+     <x>230</x>
+     <y>120</y>
+     <width>181</width>
+     <height>34</height>
     </rect>
    </property>
-   <property name="placeholderText">
-    <string>The Object ID of the service</string>
+   <property name="text">
+    <string>Select from loaded services</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="configure_service_btn">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>170</y>
+     <width>181</width>
+     <height>34</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Configure selected service</string>
    </property>
   </widget>
  </widget>

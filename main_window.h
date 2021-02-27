@@ -18,14 +18,14 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_actionNew_Appointment_triggered();
+    void on_actionNew_BookingRequest_triggered();
 
     void on_save_btn_clicked();
 
     void on_actionNew_AppointmentRequest_triggered();
 
 private:
-    ServiceConfiguratorWidget *service_configurator;
+    auto change_and_show_request_widget(QWidget *widget) noexcept -> void;
 
 private:
     Ui::MainWindow *ui;

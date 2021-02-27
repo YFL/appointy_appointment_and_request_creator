@@ -23,9 +23,10 @@ public:
     explicit ServiceConfiguratorWidget(QWidget *parent = nullptr);
     ~ServiceConfiguratorWidget();
 
-private slots:
-    void on_actionOpen_triggered();
+signals:
+    void service_config_ready(std::vector<std::shared_ptr<appointy::Answer>>);
 
+private slots:
     void on_next_btn_clicked();
 
     void on_prev_btn_clicked();
@@ -38,8 +39,11 @@ private slots:
 
     void on_actionSave_as_triggered();
 
+    void on_return_and_close_btn_clicked();
+
 private:
     auto change_service_and_show_first_question_if_any(const appointy::Service &service) -> void;
+    auto check_answers() noexcept -> std::optional<unsigned long>;
 
 private:
     std::unique_ptr<appointy::Service> _service;

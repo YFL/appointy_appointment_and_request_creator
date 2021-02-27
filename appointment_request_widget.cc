@@ -5,6 +5,8 @@
 #include <appointment_request.h>
 #include <appointy_exception.h>
 
+#include <service_configurator_widget.h>
+
 AppointmentRequestWidget::AppointmentRequestWidget(QWidget *parent) :
     RequestWidgetBase(parent),
     ui(new Ui::AppointmentRequestWidget)
@@ -91,4 +93,15 @@ std::string AppointmentRequestWidget::to_json()
         ui->service_id->text().toStdString(),
         {}
     }.to_json().dump();
+}
+
+void AppointmentRequestWidget::on_configure_service_btn_clicked()
+{
+    auto *service_config = new ServiceConfiguratorWidget {this};
+    connect(service_config, &ServiceConfiguratorWidget::service_config_ready, this, &AppointmentRequestWidget::on_service_config_ready);
+}
+
+void AppointmentRequestWidget::on_service_config_ready(std::vector<appointy::Answer>)
+{
+
 }

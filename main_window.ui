@@ -61,14 +61,14 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew_Appointment"/>
+    <addaction name="actionNew_BookingRequest"/>
     <addaction name="actionNew_AppointmentRequest"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <action name="actionNew_Appointment">
+  <action name="actionNew_BookingRequest">
    <property name="text">
-    <string>New Appointment</string>
+    <string>New BookingRequest</string>
    </property>
   </action>
   <action name="actionNew_AppointmentRequest">

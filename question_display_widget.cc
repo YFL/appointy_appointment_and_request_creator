@@ -157,6 +157,20 @@ QuestionDisplayWidget::~QuestionDisplayWidget()
     delete ui;
 }
 
+ auto QuestionDisplayWidget::validate() const-> void
+{
+    if(!check_choice(ui->answers->layout(), *_question.answer_signature))
+    {
+        throw appointy::Exception {"Question not answered. The text of the question reads: " + _question.text};
+    }
+}
+
+auto QuestionDisplayWidget::to_json() const -> nlohmann::json
+{
+    validate();
+    return answer()->to_json();
+}
+
 appointy::Question QuestionDisplayWidget::question() const
 {
     return _question;
@@ -185,9 +199,4 @@ auto QuestionDisplayWidget::answer() const -> std::shared_ptr<appointy::Answer>
     }
 
     return nullptr;
-}
-
-void QuestionDisplayWidget::on_apply_btn_clicked()
-{
-    emit apply();
 }

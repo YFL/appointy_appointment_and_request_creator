@@ -50,19 +50,6 @@
      <string>Next</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="return_and_close_btn">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>580</y>
-      <width>121</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Return and close</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

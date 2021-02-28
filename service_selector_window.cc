@@ -22,6 +22,11 @@ ServiceSelectorWindow::~ServiceSelectorWindow()
     delete ui;
 }
 
+void ServiceSelectorWindow::validate() const
+{
+
+}
+
 void ServiceSelectorWindow::on_select_btn_clicked()
 {
     auto selected_items = ui->services->selectedItems();

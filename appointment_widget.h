@@ -16,13 +16,13 @@ public:
     ~AppointmentWidget() override;
 
 public:
-    auto is_empty() noexcept -> bool override;
+    auto is_empty() const noexcept -> bool override;
     auto clear() noexcept -> void override;
     /**
      * @brief validate must throw an appointy::Exception with a meaningful message if contents of the widget are not valid
      */
-    auto validate() -> void override;
-    auto to_json() -> std::string override;
+    auto validate() const -> void override;
+    auto to_json() const -> nlohmann::json override;
 
 private:
     Ui::AppointmentWidget *ui;

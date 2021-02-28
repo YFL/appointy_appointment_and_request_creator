@@ -131,6 +131,9 @@
    </property>
   </widget>
   <widget class="QPushButton" name="select_service_btn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>230</x>
@@ -144,6 +147,9 @@
    </property>
   </widget>
   <widget class="QPushButton" name="configure_service_btn">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>100</x>

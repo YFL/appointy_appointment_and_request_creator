@@ -17,14 +17,18 @@ public:
     explicit ServiceSelectorWindow(const std::vector<appointy::Service> &services, QWidget *parent = nullptr);
     ~ServiceSelectorWindow();
 
-signals:
-    void selected(const appointy::Service service);
+public:
+    auto validate() const -> void;
+
+public:
+    auto service() const -> appointy::Service;
 
 private slots:
     void on_select_btn_clicked();
 
 private:
     std::vector<appointy::Service> _services;
+    appointy::Service *_service;
 
 private:
     Ui::ServiceSelectorWindow *ui;

@@ -9,7 +9,9 @@
 
 AppointmentRequestWidget::AppointmentRequestWidget(QWidget *parent) :
     RequestWidgetBase(parent),
-    ui(new Ui::AppointmentRequestWidget)
+    ui(new Ui::AppointmentRequestWidget),
+    _service_config_widget {nullptr},
+    _service_selector_window {nullptr}
 {
     ui->setupUi(this);
 }
@@ -19,15 +21,15 @@ AppointmentRequestWidget::~AppointmentRequestWidget()
     delete ui;
 }
 
-bool AppointmentRequestWidget::is_empty() noexcept
+auto AppointmentRequestWidget::is_empty() const noexcept -> bool
 {
     return
-            ui->first_date->text().isEmpty() && ui->interval_end->text().isEmpty() &&
-            ui->interval_start->text().isEmpty() && ui->last_date->text().isEmpty() &&
-            ui->service_id->text().isEmpty();
+        ui->first_date->text().isEmpty() && ui->interval_end->text().isEmpty() &&
+        ui->interval_start->text().isEmpty() && ui->last_date->text().isEmpty() &&
+        ui->service_id->text().isEmpty();
 }
 
-void AppointmentRequestWidget::clear() noexcept
+auto AppointmentRequestWidget::clear() noexcept -> void
 {
     ui->first_date->setText({""});
     ui->interval_end->setText({""});
@@ -36,7 +38,7 @@ void AppointmentRequestWidget::clear() noexcept
     ui->service_id->setText({""});
 }
 
-void AppointmentRequestWidget::validate()
+auto AppointmentRequestWidget::validate() const -> void
 {
 
     try
@@ -47,7 +49,6 @@ void AppointmentRequestWidget::validate()
     {
         throw appointy::Exception {err_msg("First date", e.what())};
     }
-
 
     try
     {
@@ -76,13 +77,22 @@ void AppointmentRequestWidget::validate()
         throw appointy::Exception {err_msg("Last date", e.what())};
     }
 
-    if(ui->service_id->text().isEmpty())
+    if(!_service_selector_window)
     {
-        throw appointy::Exception {"The " + ui->service_id_label->text().toStdString() + " can not be left empty"};
+        throw appointy::Exception {"No service was selected from the loaded services, if any"};
     }
+
+    _service_selector_window->validate();
+
+    if(!_service_config_widget)
+    {
+        throw appointy::Exception {"The selected service, if any, wasn't configured"};
+    }
+
+    _service_config_widget->validate();
 }
 
-std::string AppointmentRequestWidget::to_json()
+auto AppointmentRequestWidget::to_json() const -> nlohmann::json
 {
     validate();
     return appointy::AppointmentRequest {
@@ -90,18 +100,13 @@ std::string AppointmentRequestWidget::to_json()
         string_to_date(ui->last_date->text().toStdString()),
         string_to_time(ui->interval_start->text().toStdString()),
         string_to_time(ui->interval_end->text().toStdString()),
-        ui->service_id->text().toStdString(),
-        {}
     }.to_json().dump();
 }
 
 void AppointmentRequestWidget::on_configure_service_btn_clicked()
 {
-    auto *service_config = new ServiceConfiguratorWidget {this};
-    connect(service_config, &ServiceConfiguratorWidget::service_config_ready, this, &AppointmentRequestWidget::on_service_config_ready);
-}
+    delete _service_config_widget;
+    delete _service_selector_window;
 
-void AppointmentRequestWidget::on_service_config_ready(std::vector<appointy::Answer>)
-{
-
+    _service_config_widget = new ServiceConfiguratorWidget {{}, this};
 }

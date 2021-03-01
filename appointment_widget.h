@@ -16,7 +16,7 @@ public:
     ~AppointmentWidget() override;
 
 public:
-    auto is_empty() const noexcept -> bool override;
+    //auto is_empty() const noexcept -> bool override;
     auto clear() noexcept -> void override;
     /**
      * @brief validate must throw an appointy::Exception with a meaningful message if contents of the widget are not valid

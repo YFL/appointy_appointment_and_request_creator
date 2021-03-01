@@ -23,32 +23,37 @@ public:
     ~ServiceConfiguratorWidget();
 
 public:
-    auto validate() -> void;
+    auto validate() const -> void;
 
+    /**
+     * @brief returns a json object of the form: {service_id : <object>, answers: <array of answer objects>}
+     * @return a json object of the form: {service_id : <object>, answers: <array of answer objects>}
+     * @throws appointy::Exception with a meaningful message if the answers' validation fails
+     */
     auto to_json() -> nlohmann::json;
+
+public:
+    auto service_id() const noexcept -> nlohmann::json;
+    auto answers() const -> std::vector<std::shared_ptr<appointy::Answer>>;
+
+public:
+    auto service() const noexcept -> appointy::Service;
 
 private slots:
     void on_next_btn_clicked();
 
     void on_prev_btn_clicked();
 
-    void on_service_selected(const appointy::Service &service);
-
-    void on_answer_apply();
-
     void on_actionReset_triggered();
 
     void on_actionSave_as_triggered();
 
-    void on_return_and_close_btn_clicked();
-
 private:
-    auto create_question_widgets_and_show_first_question_if_any(const appointy::Service &service) noexcept -> void;
-    auto check_answers() noexcept -> std::optional<unsigned long>;
+    auto create_question_widgets_and_show_first_question_if_any() noexcept -> void;
+    auto check_answers() const noexcept -> std::optional<unsigned long>;
 
 private:
     appointy::Service _service;
-    std::vector<std::shared_ptr<appointy::Answer>> _answers;
     std::vector<QuestionDisplayWidget *> question_widgets;
     size_t current_question_index;
 

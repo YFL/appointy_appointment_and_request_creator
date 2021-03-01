@@ -24,6 +24,8 @@ private slots:
 
     void on_actionNew_AppointmentRequest_triggered();
 
+    void on_preview_btn_clicked();
+
 private:
     auto change_and_show_request_widget(QWidget *widget) noexcept -> void;
 

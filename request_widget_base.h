@@ -15,7 +15,7 @@ public:
     virtual ~RequestWidgetBase() = default;
 
 public:
-    virtual auto is_empty() const noexcept -> bool = 0;
+    //virtual auto is_empty() const noexcept -> bool = 0;
     virtual auto clear() noexcept -> void = 0;
     /**
      * @brief validate must throw an appointy::Exception with a meaningful message if contents of the widget are not valid

@@ -22,7 +22,7 @@ public:
     ~AppointmentRequestWidget() override;
 
 public:
-    auto is_empty() const noexcept -> bool override;
+    //auto is_empty() const noexcept -> bool override;
     auto clear() noexcept -> void override;
     /**
      * @brief validate must throw an appointy::Exception with a meaningful message if contents of the widget are not valid
@@ -31,8 +31,9 @@ public:
     auto to_json() const -> nlohmann::json override;
 
 private slots:
+    void on_load_services_btn_clicked();
+    void on_select_service_btn_clicked();
     void on_configure_service_btn_clicked();
-    void on_service_config_ready(std::vector<appointy::Answer>);
 
 private:
     Ui::AppointmentRequestWidget *ui;

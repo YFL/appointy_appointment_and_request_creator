@@ -1,12 +1,16 @@
 #include "service_selector_window.h"
 #include "ui_service_selector_window.h"
 
+#include <appointy_exception.h>
+
 ServiceSelectorWindow::ServiceSelectorWindow(const std::vector<appointy::Service> &services, QWidget *parent) :
     QMainWindow(parent),
     _services {services},
     ui(new Ui::ServiceSelectorWindow)
 {
     ui->setupUi(this);
+    // disables close button
+    setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
     for(qulonglong i = 0; i < _services.size(); i++)
     {
         auto *item = new QListWidgetItem {ui->services};
@@ -24,12 +28,23 @@ ServiceSelectorWindow::~ServiceSelectorWindow()
 
 void ServiceSelectorWindow::validate() const
 {
+    if(!_service)
+    {
+        throw appointy::Exception {"No service selected"};
+    }
+}
 
+appointy::Service ServiceSelectorWindow::service() const
+{
+    validate();
+
+    return *_service;
 }
 
 void ServiceSelectorWindow::on_select_btn_clicked()
 {
     auto selected_items = ui->services->selectedItems();
     auto selected_item = selected_items[0];
-    emit selected(_services[selected_item->data(Qt::UserRole).toULongLong()]);
+    _service = &_services[selected_item->data(Qt::UserRole).toULongLong()];
+    close();
 }

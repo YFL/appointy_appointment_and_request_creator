@@ -20,7 +20,6 @@ public:
 
 public:
     auto validate() const -> void;
-    auto to_json() const -> nlohmann::json;
 
 public:
     auto question() const -> appointy::Question;

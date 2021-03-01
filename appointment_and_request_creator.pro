@@ -47,10 +47,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 unix:!macx: LIBS += -L$$PWD/../appointy/build/appointy_base/Debug/bin/ -lappointy_base
+unix:!macx: LIBS += -L$$PWD/../appointy/build/appointy/Debug/bin/ -lappointy
 
 INCLUDEPATH += $$PWD/../appointy/appointy_base/include/util
 INCLUDEPATH += $$PWD/../appointy/appointy_base/include/appointment
 INCLUDEPATH += $$PWD/../appointy/appointy_base/include/service
 INCLUDEPATH += $$PWD/../appointy/ext/json/include
 INCLUDEPATH += $$PWD/../appointy/ext/json/include/nlohmann
+INCLUDEPATH += $$PWD/../appointy/appointy/include/
 DEPENDPATH += $$PWD/../appointy/appointy_base/
+DEPENDPATH += $$PWD/../appointy/appointy/

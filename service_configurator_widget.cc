@@ -20,6 +20,7 @@ ServiceConfiguratorWidget::ServiceConfiguratorWidget(const appointy::Service &se
     ui(new Ui::ServiceConfiguratorWidget)
 {
     ui->setupUi(this);
+    create_question_widgets_and_show_first_question_if_any();
 }
 
 ServiceConfiguratorWidget::~ServiceConfiguratorWidget()
@@ -27,7 +28,7 @@ ServiceConfiguratorWidget::~ServiceConfiguratorWidget()
     delete ui;
 }
 
-auto ServiceConfiguratorWidget::validate() -> void
+auto ServiceConfiguratorWidget::validate() const -> void
 {
     auto index = check_answers();
     if(index)
@@ -38,20 +39,39 @@ auto ServiceConfiguratorWidget::validate() -> void
 
 auto ServiceConfiguratorWidget::to_json() -> nlohmann::json
 {
+    validate();
     auto json = "{}"_json;
     json["service_id"] = _service.id;
     json["answers"] = "[]"_json;
 
-    for(auto i = 0ul; i < _answers.size(); i++)
+    for(auto i = 0ul; i < question_widgets.size(); i++)
     {
-        if(_answers[i] == nullptr)
-        {
-            throw appointy::Exception {"One of the questions was not answered. The text of the questions reads: " + question_widgets[i]->question().text};
-        }
-        json["answers"].push_back(_answers[i]->to_json());
+        json["answers"].push_back(question_widgets[i]->answer()->to_json());
     }
 
     return json;
+}
+
+auto ServiceConfiguratorWidget::service_id() const noexcept -> nlohmann::json
+{
+    return _service.id;
+}
+
+auto ServiceConfiguratorWidget::answers() const -> std::vector<std::shared_ptr<appointy::Answer>>
+{
+    validate();
+    auto answers = std::vector<std::shared_ptr<appointy::Answer>> {};
+    for(auto *qw : question_widgets)
+    {
+        answers.push_back(qw->answer());
+    }
+
+    return answers;
+}
+
+auto ServiceConfiguratorWidget::service() const noexcept -> appointy::Service
+{
+    return _service;
 }
 
 void ServiceConfiguratorWidget::on_next_btn_clicked()
@@ -84,49 +104,34 @@ void ServiceConfiguratorWidget::on_prev_btn_clicked()
     question_widgets[current_question_index]->show();
 }
 
-void ServiceConfiguratorWidget::on_service_selected(const appointy::Service &service)
-{
-    create_question_widgets_and_show_first_question_if_any(service);
-}
-
-void ServiceConfiguratorWidget::on_answer_apply()
-{
-    auto answer = dynamic_cast<QuestionDisplayWidget &>(*question_widgets[current_question_index]).answer();
-    if(!answer)
-    {
-        show_error_with_ok("The answer is not filled out correctly", "");
-    }
-    else
-    {
-        _answers[current_question_index] = answer;
-    }
-}
-
-auto ServiceConfiguratorWidget::create_question_widgets_and_show_first_question_if_any(const appointy::Service &service) noexcept -> void
+auto ServiceConfiguratorWidget::create_question_widgets_and_show_first_question_if_any() noexcept -> void
 {
     if(_service.questions.size() > 0)
     {
-        _answers.resize(_service.questions.size());
         for(auto &question : _service.questions)
         {
             question_widgets.push_back(new QuestionDisplayWidget {question, ui->question_widget});
-            connect(question_widgets.back(), &QuestionDisplayWidget::apply, this, &ServiceConfiguratorWidget::on_answer_apply);
+            question_widgets.back()->hide();
         }
         current_question_index = 0;
         question_widgets[current_question_index]->show();
     }
     ui->prev_btn->setEnabled(false);
-    if(_service.questions.size() == 1)
+    if(_service.questions.size() <= 1)
     {
         ui->next_btn->setEnabled(false);
     }
 }
 
-auto ServiceConfiguratorWidget::check_answers() noexcept -> std::optional<unsigned long>
+auto ServiceConfiguratorWidget::check_answers() const noexcept -> std::optional<unsigned long>
 {
-    for(uint64_t i = 0; i < _answers.size(); i++)
+    for(uint64_t i = 0; i < question_widgets.size(); i++)
     {
-        if(_answers[i] == nullptr)
+        try
+        {
+            question_widgets[i]->validate();
+        }
+        catch(const appointy::Exception &)
         {
             return i;
         }
@@ -137,7 +142,12 @@ auto ServiceConfiguratorWidget::check_answers() noexcept -> std::optional<unsign
 
 void ServiceConfiguratorWidget::on_actionReset_triggered()
 {
-    create_question_widgets_and_show_first_question_if_any(_service);
+    for(auto *question : question_widgets)
+    {
+        delete question;
+    }
+    question_widgets.clear();
+    create_question_widgets_and_show_first_question_if_any();
 }
 
 void ServiceConfiguratorWidget::on_actionSave_as_triggered()

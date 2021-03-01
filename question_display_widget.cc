@@ -165,12 +165,6 @@ QuestionDisplayWidget::~QuestionDisplayWidget()
     }
 }
 
-auto QuestionDisplayWidget::to_json() const -> nlohmann::json
-{
-    validate();
-    return answer()->to_json();
-}
-
 appointy::Question QuestionDisplayWidget::question() const
 {
     return _question;

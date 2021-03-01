@@ -3,9 +3,11 @@
 
 #include <QEventLoop>
 
-#include <service_configurator_widget.h>
+#include <appointy_exception.h>
+#include <../service_creator/util.h>
 
 #include <appointment_request_widget.h>
+#include <service_configurator_widget.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -44,4 +46,20 @@ auto MainWindow::change_and_show_request_widget(QWidget *widget) noexcept -> voi
     }
     widget->setParent(ui->request_widget);
     widget->show();
+}
+
+void MainWindow::on_preview_btn_clicked()
+{
+    auto *widget = dynamic_cast<RequestWidgetBase *>(ui->request_widget->children().at(0));
+    if(widget)
+    {
+        try
+        {
+            ui->text_browser->setText(widget->to_json().dump().c_str());
+        }
+        catch(const appointy::Exception &e)
+        {
+            show_error_with_ok("An error occurred during the retrieval of the preview", e.what());
+        }
+    }
 }

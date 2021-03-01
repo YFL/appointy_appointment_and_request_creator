@@ -27,7 +27,7 @@
      <string>Save</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QTextBrowser" name="text_browser">
     <property name="geometry">
      <rect>
       <x>420</x>
@@ -45,6 +45,19 @@
       <width>410</width>
       <height>520</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="preview_btn">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>530</y>
+      <width>88</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Preview</string>
     </property>
    </widget>
   </widget>

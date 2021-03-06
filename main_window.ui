@@ -76,6 +76,7 @@
     </property>
     <addaction name="actionNew_BookingRequest"/>
     <addaction name="actionNew_AppointmentRequest"/>
+    <addaction name="actionNew_Appointment"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -87,6 +88,11 @@
   <action name="actionNew_AppointmentRequest">
    <property name="text">
     <string>New AppointmentRequest</string>
+   </property>
+  </action>
+  <action name="actionNew_Appointment">
+   <property name="text">
+    <string>New Appointment</string>
    </property>
   </action>
  </widget>

@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include <request_widget_base.h>
 #include <service_configurator_widget.h>
 
 QT_BEGIN_NAMESPACE
@@ -26,8 +27,11 @@ private slots:
 
     void on_preview_btn_clicked();
 
+    void on_actionNew_Appointment_triggered();
+
 private:
     auto change_and_show_request_widget(QWidget *widget) noexcept -> void;
+    auto request_widget() const noexcept -> const RequestWidgetBase *;
 
 private:
     Ui::MainWindow *ui;

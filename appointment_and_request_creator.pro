@@ -12,6 +12,7 @@ SOURCES += \
     ../service_creator/util.cc \
     appointment_request_widget.cc \
     appointment_widget.cc \
+    booking_request_widget.cc \
     id_check_box.cc \
     id_radio_button.cc \
     main.cc \
@@ -25,6 +26,7 @@ HEADERS += \
     ../service_creator/util.h \
     appointment_request_widget.h \
     appointment_widget.h \
+    booking_request_widget.h \
     id_check_box.h \
     id_radio_button.h \
     main_window.h \
@@ -36,6 +38,7 @@ HEADERS += \
 FORMS += \
     appointment_request_widget.ui \
     appointment_widget.ui \
+    booking_request_widget.ui \
     main_window.ui \
     question_display_widget.ui \
     service_configurator_widget.ui \

@@ -7,100 +7,68 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>520</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="date_label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>10</y>
-     <width>41</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Date:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="date">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>0</y>
-     <width>191</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="placeholderText">
-    <string>Format: y{1,4}.m{1,2}.d{1,2}</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="start_label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>50</y>
-     <width>41</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Start:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="start">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>40</y>
-     <width>191</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="placeholderText">
-    <string>Format: h{1,2}:m{1,2}:s{1,2}</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="appointment_request_widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>120</y>
-     <width>410</width>
-     <height>400</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="end_label">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>90</y>
-     <width>41</width>
-     <height>18</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>End:</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="end">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>80</y>
-     <width>191</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="placeholderText">
-    <string>Format: h{1,2}:m{1,2}:s{1,2}</string>
-   </property>
-  </widget>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="id_label">
+     <property name="text">
+      <string>id:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="date_label">
+     <property name="text">
+      <string>Date:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="start_label">
+     <property name="text">
+      <string>Start:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="end_label">
+     <property name="text">
+      <string>End:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="date"/>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="start"/>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="end"/>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="load_request_btn">
+     <property name="text">
+      <string>Load AppointmentRequest from JSON</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QPushButton" name="new_appointment_request_btn">
+     <property name="text">
+      <string>New AppointmentRequest</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="id"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

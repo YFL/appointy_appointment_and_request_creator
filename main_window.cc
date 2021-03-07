@@ -14,6 +14,18 @@
 #include <booking_request_widget.h>
 #include <service_configurator_widget.h>
 
+auto strip_unnecessary_from_json_dump(const std::string &string) -> std::string
+{
+    auto json = std::string {};
+    std::copy_if(string.begin(), string.end(), std::back_inserter(json), [](auto x) {return x != '\\';});
+    if(json[0] == '"')
+    {
+        json = json.substr(1, json.size() - 2);
+    }
+
+    return json;
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -51,11 +63,7 @@ void MainWindow::on_save_btn_clicked()
                 std::ofstream file {selected_file.toStdString()};
                 if(file.is_open())
                 {
-                    auto dump = request_widget()->to_json().dump();
-                    auto json = std::string {};
-                    std::copy_if(dump.begin(), dump.end(), std::back_inserter(json), [](auto x) {return x != '\\';});
-                    json = json.substr(1, json.size() - 2);
-                    file << json;
+                    file << strip_unnecessary_from_json_dump(request_widget()->to_json().dump());
                 }
                 else
                 {
@@ -107,7 +115,7 @@ void MainWindow::on_preview_btn_clicked()
     {
         try
         {
-            ui->text_browser->setText(widget->to_json().dump().c_str());
+            ui->text_browser->setText(strip_unnecessary_from_json_dump(widget->to_json().dump()).c_str());
         }
         catch(const appointy::Exception &e)
         {

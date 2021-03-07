@@ -21,12 +21,18 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="id"/>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="date_label">
      <property name="text">
       <string>Date:</string>
      </property>
     </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="date"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="start_label">
@@ -35,18 +41,15 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="start"/>
+   </item>
    <item row="3" column="0">
     <widget class="QLabel" name="end_label">
      <property name="text">
       <string>End:</string>
      </property>
     </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="date"/>
-   </item>
-   <item row="2" column="1">
-    <widget class="QLineEdit" name="start"/>
    </item>
    <item row="3" column="1">
     <widget class="QLineEdit" name="end"/>
@@ -57,16 +60,6 @@
       <string>Load AppointmentRequest from JSON</string>
      </property>
     </widget>
-   </item>
-   <item row="5" column="1">
-    <widget class="QPushButton" name="new_appointment_request_btn">
-     <property name="text">
-      <string>New AppointmentRequest</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="id"/>
    </item>
   </layout>
  </widget>

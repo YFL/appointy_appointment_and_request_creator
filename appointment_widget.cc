@@ -1,9 +1,13 @@
 #include "appointment_widget.h"
 #include "ui_appointment_widget.h"
 
+#include <fstream>
+
 #include <QFileDialog>
 
 #include <appointy_exception.h>
+#include <io_ops.h>
+#include <json_parser.h>
 
 #include <../service_creator/util.h>
 
@@ -103,6 +107,22 @@ void AppointmentWidget::on_load_request_btn_clicked()
         if(selected_file.isEmpty())
         {
             show_error_with_ok("No file selected", "You have to select a file to be able to load it");
+            return;
+        }
+
+        try
+        {
+            auto file_contents = appointy::open_file_to_string(selected_file.toStdString());
+            auto json = nlohmann::json::parse(file_contents);
+            appointment_request = std::unique_ptr<appointy::AppointmentRequest>(new appointy::AppointmentRequest {appointy::JSON_Parser::parse_appointment_request(json)});
+        }
+        catch(const appointy::Exception &e)
+        {
+            show_error_with_ok("Couldn't open file", e.what());
+        }
+        catch(const nlohmann::detail::parse_error &e)
+        {
+            show_error_with_ok("Error while parsing string in JSON format", e.what());
         }
     }
 }

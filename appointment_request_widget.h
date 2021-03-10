@@ -35,6 +35,8 @@ private slots:
     void on_select_service_btn_clicked();
     void on_configure_service_btn_clicked();
 
+    void on_request_duration_btn_clicked();
+
 private:
     Ui::AppointmentRequestWidget *ui;
 

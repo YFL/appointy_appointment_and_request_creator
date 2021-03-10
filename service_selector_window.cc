@@ -11,7 +11,7 @@ ServiceSelectorWindow::ServiceSelectorWindow(const std::vector<appointy::Service
     ui->setupUi(this);
     // disables close button
     setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
-    for(qulonglong i = 0; i < _services.size(); i++)
+    for(auto i = qulonglong {0}; i < _services.size(); i++)
     {
         auto *item = new QListWidgetItem {ui->services};
         item->setData(Qt::UserRole, QVariant {i});

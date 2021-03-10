@@ -9,6 +9,7 @@
 #include <appointment_request.h>
 #include <appointy_exception.h>
 #include <io_ops.h>
+#include <request_handling.h>
 
 #include <service_configurator_widget.h>
 #include <service_selector_window.h>
@@ -154,4 +155,25 @@ void AppointmentRequestWidget::on_configure_service_btn_clicked()
     }
 
     _service_config_widget->show();
+}
+
+void AppointmentRequestWidget::on_request_duration_btn_clicked()
+{
+    if(!_service_config_widget)
+    {
+        show_error_with_ok("The service wasn't configured", "Press the Configure Service button to configure the service. If it isn't enabled, you have to load and select a service first");
+        return;
+    }
+    try
+    {
+        _service_config_widget->validate();
+    }
+    catch(const appointy::Exception &e)
+    {
+        show_error_with_ok("The service wasn't configured properly", e.what());
+        return;
+    }
+
+    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::accept_estimated_duration_request(appointy::DurationRequest {_service_config_widget->service_id(), _service_config_widget->answers()}, "mongodb://localhost", "appointy_db").to_string()).c_str());
+    ui->estimated_duration_label->adjustSize();
 }

@@ -8,6 +8,7 @@
 #include <appointy_exception.h>
 #include <io_ops.h>
 #include <json_parser.h>
+#include <request_handling.h>
 
 #include <../service_creator/util.h>
 
@@ -125,4 +126,15 @@ void AppointmentWidget::on_load_request_btn_clicked()
             show_error_with_ok("Error while parsing string in JSON format", e.what());
         }
     }
+}
+
+void AppointmentWidget::on_request_duration_btn_clicked()
+{
+    if(!appointment_request)
+    {
+        show_error_with_ok("No request loaded", "You have to load a request first by clicking on the \"Load AppointmentRequest from JSON\" button");
+        return;
+    }
+
+    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::accept_estimated_duration_request({appointment_request->service_id, appointment_request->answers}, "mongodb://localhost", "appointy_db").to_string()).c_str());
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>300</height>
+    <height>379</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,6 +58,26 @@
     <widget class="QPushButton" name="load_request_btn">
      <property name="text">
       <string>Load AppointmentRequest from JSON</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QPushButton" name="request_duration_btn">
+     <property name="text">
+      <string>Request estimated duration</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QLabel" name="estimated_duration_label">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Estimated duration:</string>
      </property>
     </widget>
    </item>

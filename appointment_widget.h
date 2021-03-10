@@ -28,6 +28,8 @@ public:
 private slots:
     void on_load_request_btn_clicked();
 
+    void on_request_duration_btn_clicked();
+
 private:
     Ui::AppointmentWidget *ui;
 

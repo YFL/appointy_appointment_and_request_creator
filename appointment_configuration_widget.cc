@@ -1,12 +1,12 @@
-#include "appointment_request_widget.h"
-#include "ui_appointment_request_widget.h"
+#include "appointment_configuration_widget.h"
+#include "ui_appointment_configuration_widget.h"
 
 #include <QFileDialog>
 
 #include <fstream>
 
 #include "../service_creator/util.h"
-#include <appointment_request.h>
+#include <appointment_configuration.h>
 #include <appointy_exception.h>
 #include <io_ops.h>
 #include <request_handling.h>
@@ -14,16 +14,16 @@
 #include <service_configurator_widget.h>
 #include <service_selector_window.h>
 
-AppointmentRequestWidget::AppointmentRequestWidget(QWidget *parent) :
+AppointmentConfigurationWidget::AppointmentConfigurationWidget(QWidget *parent) :
     RequestWidgetBase(parent),
-    ui(new Ui::AppointmentRequestWidget),
+    ui(new Ui::AppointmentConfigurationWidget),
     _service_config_widget {nullptr},
     _service_selector_window {nullptr}
 {
     ui->setupUi(this);
 }
 
-AppointmentRequestWidget::~AppointmentRequestWidget()
+AppointmentConfigurationWidget::~AppointmentConfigurationWidget()
 {
     delete ui;
 }
@@ -36,7 +36,7 @@ AppointmentRequestWidget::~AppointmentRequestWidget()
 //        ui->service_id->text().isEmpty();
 //}
 
-auto AppointmentRequestWidget::clear() noexcept -> void
+auto AppointmentConfigurationWidget::clear() noexcept -> void
 {
     ui->first_date->setText({""});
     ui->interval_end->setText({""});
@@ -48,7 +48,7 @@ auto AppointmentRequestWidget::clear() noexcept -> void
     ui->configure_service_btn->setEnabled(false);
 }
 
-auto AppointmentRequestWidget::validate() const -> void
+auto AppointmentConfigurationWidget::validate() const -> void
 {
 
     try
@@ -102,20 +102,22 @@ auto AppointmentRequestWidget::validate() const -> void
     _service_config_widget->validate();
 }
 
-auto AppointmentRequestWidget::to_json() const -> nlohmann::json
+auto AppointmentConfigurationWidget::to_json() const -> nlohmann::json
 {
     validate();
-    return appointy::AppointmentRequest {
+    return appointy::AppointmentConfiguration{
         string_to_date(ui->first_date->text().toStdString()),
         string_to_date(ui->last_date->text().toStdString()),
         string_to_time(ui->interval_start->text().toStdString()),
         string_to_time(ui->interval_end->text().toStdString()),
-        _service_config_widget->service_id(),
-        _service_config_widget->answers()
-    }.to_json().dump();
+        {
+            _service_config_widget->service_id(),
+            _service_config_widget->configuration()
+        }
+    }.to_json();
 }
 
-void AppointmentRequestWidget::on_load_services_btn_clicked()
+void AppointmentConfigurationWidget::on_load_services_btn_clicked()
 {
     auto fod = QFileDialog {};
     fod.setAcceptMode(QFileDialog::AcceptMode::AcceptOpen);
@@ -141,13 +143,13 @@ void AppointmentRequestWidget::on_load_services_btn_clicked()
     }
 }
 
-void AppointmentRequestWidget::on_select_service_btn_clicked()
+void AppointmentConfigurationWidget::on_select_service_btn_clicked()
 {
     _service_selector_window->show();
     ui->configure_service_btn->setEnabled(true);
 }
 
-void AppointmentRequestWidget::on_configure_service_btn_clicked()
+void AppointmentConfigurationWidget::on_configure_service_btn_clicked()
 {
     if(!_service_config_widget || _service_config_widget->service() != _service_selector_window->service())
     {
@@ -157,7 +159,7 @@ void AppointmentRequestWidget::on_configure_service_btn_clicked()
     _service_config_widget->show();
 }
 
-void AppointmentRequestWidget::on_request_duration_btn_clicked()
+void AppointmentConfigurationWidget::on_request_duration_btn_clicked()
 {
     if(!_service_config_widget)
     {
@@ -174,6 +176,6 @@ void AppointmentRequestWidget::on_request_duration_btn_clicked()
         return;
     }
 
-    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::accept_estimated_duration_request(appointy::DurationRequest {_service_config_widget->service_id(), _service_config_widget->answers()}, "mongodb://localhost", "appointy_db").to_string()).c_str());
+    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::duration_of_config(appointy::ServiceConfiguration {_service_config_widget->service_id(), _service_config_widget->configuration()}, "mongodb://localhost", "appointy_db").completion_time.to_string()).c_str());
     ui->estimated_duration_label->adjustSize();
 }

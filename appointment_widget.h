@@ -1,8 +1,8 @@
 #ifndef APPOINTMENT_WIDGET_H
 #define APPOINTMENT_WIDGET_H
 
-#include <appointment_request.h>
-#include <appointment_request_widget.h>
+#include <appointment_configuration.h>
+#include <appointment_configuration_widget.h>
 #include <request_widget_base.h>
 
 namespace Ui {
@@ -34,8 +34,7 @@ private:
     Ui::AppointmentWidget *ui;
 
 private:
-    std::unique_ptr<AppointmentRequestWidget> appointment_request_widget;
-    std::unique_ptr<appointy::AppointmentRequest> appointment_request;
+    std::unique_ptr<appointy::AppointmentConfiguration> appointment_configuration;
 };
 
 #endif // APPOINTMENT_WIDGET_H

@@ -23,7 +23,7 @@ private slots:
 
     void on_save_btn_clicked();
 
-    void on_actionNew_AppointmentRequest_triggered();
+    void on_actionNew_AppointmentConfiguration_triggered();
 
     void on_preview_btn_clicked();
 

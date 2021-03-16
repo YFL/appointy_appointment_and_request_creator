@@ -75,7 +75,7 @@
      <string>File</string>
     </property>
     <addaction name="actionNew_BookingRequest"/>
-    <addaction name="actionNew_AppointmentRequest"/>
+    <addaction name="actionNew_AppointmentConfiguration"/>
     <addaction name="actionNew_Appointment"/>
    </widget>
    <addaction name="menuFile"/>
@@ -85,9 +85,9 @@
     <string>New BookingRequest</string>
    </property>
   </action>
-  <action name="actionNew_AppointmentRequest">
+  <action name="actionNew_AppointmentConfiguration">
    <property name="text">
-    <string>New AppointmentRequest</string>
+    <string>New AppointmentConfiguration</string>
    </property>
   </action>
   <action name="actionNew_Appointment">

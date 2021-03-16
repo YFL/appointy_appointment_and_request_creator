@@ -57,7 +57,7 @@ auto ServiceConfiguratorWidget::service_id() const noexcept -> nlohmann::json
     return _service.id;
 }
 
-auto ServiceConfiguratorWidget::answers() const -> std::vector<std::shared_ptr<appointy::Answer>>
+auto ServiceConfiguratorWidget::configuration() const -> std::vector<std::shared_ptr<appointy::Answer>>
 {
     validate();
     auto answers = std::vector<std::shared_ptr<appointy::Answer>> {};

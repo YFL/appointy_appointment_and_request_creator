@@ -1,5 +1,5 @@
-#ifndef APPOINTMENT_REQUEST_WIDGET_H
-#define APPOINTMENT_REQUEST_WIDGET_H
+#ifndef APPOINTMENT_CONFIGURATION_WIDGET_H
+#define APPOINTMENT_CONFIGURATION_WIDGET_H
 
 #include "request_widget_base.h"
 
@@ -10,16 +10,16 @@
 #include <service_selector_window.h>
 
 namespace Ui {
-class AppointmentRequestWidget;
+class AppointmentConfigurationWidget;
 }
 
-class AppointmentRequestWidget : public RequestWidgetBase
+class AppointmentConfigurationWidget : public RequestWidgetBase
 {
     Q_OBJECT
 
 public:
-    explicit AppointmentRequestWidget(QWidget *parent = nullptr);
-    ~AppointmentRequestWidget() override;
+    explicit AppointmentConfigurationWidget(QWidget *parent = nullptr);
+    ~AppointmentConfigurationWidget() override;
 
 public:
     //auto is_empty() const noexcept -> bool override;
@@ -38,11 +38,11 @@ private slots:
     void on_request_duration_btn_clicked();
 
 private:
-    Ui::AppointmentRequestWidget *ui;
+    Ui::AppointmentConfigurationWidget *ui;
 
 private:
     ServiceConfiguratorWidget *_service_config_widget;
     ServiceSelectorWindow *_service_selector_window;
 };
 
-#endif // APPOINTMENT_REQUEST_WIDGET_H
+#endif // APPOINTMENT_CONFIGURATION_WIDGET_H

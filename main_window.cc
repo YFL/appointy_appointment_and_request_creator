@@ -10,7 +10,7 @@
 #include <../service_creator/util.h>
 
 #include <appointment_widget.h>
-#include <appointment_request_widget.h>
+#include <appointment_configuration_widget.h>
 #include <booking_request_widget.h>
 #include <service_configurator_widget.h>
 
@@ -82,9 +82,9 @@ void MainWindow::on_save_btn_clicked()
     }
 }
 
-void MainWindow::on_actionNew_AppointmentRequest_triggered()
+void MainWindow::on_actionNew_AppointmentConfiguration_triggered()
 {
-    change_and_show_request_widget(new AppointmentRequestWidget {this});
+    change_and_show_request_widget(new AppointmentConfigurationWidget {this});
 }
 
 auto MainWindow::change_and_show_request_widget(QWidget *widget) noexcept -> void

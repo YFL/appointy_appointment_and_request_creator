@@ -34,7 +34,7 @@ public:
 
 public:
     auto service_id() const noexcept -> nlohmann::json;
-    auto answers() const -> std::vector<std::shared_ptr<appointy::Answer>>;
+    auto configuration() const -> std::vector<std::shared_ptr<appointy::Answer>>;
 
 public:
     auto service() const noexcept -> appointy::Service;

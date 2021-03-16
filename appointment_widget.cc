@@ -14,8 +14,7 @@
 
 AppointmentWidget::AppointmentWidget(QWidget *parent) :
     RequestWidgetBase {parent},
-    ui(new Ui::AppointmentWidget),
-    appointment_request_widget {nullptr}
+    ui(new Ui::AppointmentWidget)
 {
     ui->setupUi(this);
 }
@@ -31,8 +30,7 @@ void AppointmentWidget::clear() noexcept
     ui->date->setText("");
     ui->start->setText("");
     ui->end->setText("");
-    appointment_request_widget = nullptr;
-    appointment_request = nullptr;
+    appointment_configuration = nullptr;
 }
 
 void AppointmentWidget::validate() const
@@ -64,14 +62,9 @@ void AppointmentWidget::validate() const
         throw appointy::Exception {"The end time's format is wrong"};
     }
 
-    if(!appointment_request_widget && !appointment_request)
+    if(!appointment_configuration)
     {
-        throw appointy::Exception {"No request loaded or created"};
-    }
-
-    if(appointment_request_widget)
-    {
-        appointment_request_widget->validate();
+        throw appointy::Exception {"No request loaded"};
     }
 }
 
@@ -83,14 +76,7 @@ nlohmann::json AppointmentWidget::to_json() const
     json["date"] = string_to_date(ui->date->text().toStdString()).to_json();
     json["start"] = string_to_time(ui->start->text().toStdString()).to_json();
     json["end"] = string_to_time(ui->end->text().toStdString()).to_json();
-    if(appointment_request)
-    {
-        json["request"] = appointment_request->to_json();
-    }
-    if(appointment_request_widget)
-    {
-        json["request"] = appointment_request_widget->to_json();
-    }
+    json["configuration"] = appointment_configuration->to_json();
 
     return json;
 }
@@ -115,7 +101,7 @@ void AppointmentWidget::on_load_request_btn_clicked()
         {
             auto file_contents = appointy::open_file_to_string(selected_file.toStdString());
             auto json = nlohmann::json::parse(file_contents);
-            appointment_request = std::unique_ptr<appointy::AppointmentRequest>(new appointy::AppointmentRequest {appointy::JSON_Parser::parse_appointment_request(json)});
+            appointment_configuration = std::unique_ptr<appointy::AppointmentConfiguration>(new appointy::AppointmentConfiguration {appointy::JSON_Parser::parse_appointment_configuration(json)});
         }
         catch(const appointy::Exception &e)
         {
@@ -130,11 +116,11 @@ void AppointmentWidget::on_load_request_btn_clicked()
 
 void AppointmentWidget::on_request_duration_btn_clicked()
 {
-    if(!appointment_request)
+    if(!appointment_configuration)
     {
         show_error_with_ok("No request loaded", "You have to load a request first by clicking on the \"Load AppointmentRequest from JSON\" button");
         return;
     }
 
-    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::accept_estimated_duration_request({appointment_request->service_id, appointment_request->answers}, "mongodb://localhost", "appointy_db").to_string()).c_str());
+    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::duration_of_config({appointment_configuration->configuration.service_id, appointment_configuration->configuration.configuration}, "mongodb://localhost", "appointy_db").completion_time.to_string()).c_str());
 }

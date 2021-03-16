@@ -10,7 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     ../service_creator/util.cc \
-    appointment_request_widget.cc \
+    appointment_configuration_widget.cc \
     appointment_widget.cc \
     booking_request_widget.cc \
     id_check_box.cc \
@@ -24,7 +24,7 @@ SOURCES += \
 
 HEADERS += \
     ../service_creator/util.h \
-    appointment_request_widget.h \
+    appointment_configuration_widget.h \
     appointment_widget.h \
     booking_request_widget.h \
     id_check_box.h \
@@ -36,7 +36,7 @@ HEADERS += \
     service_selector_window.h
 
 FORMS += \
-    appointment_request_widget.ui \
+    appointment_configuration_widget.ui \
     appointment_widget.ui \
     booking_request_widget.ui \
     main_window.ui \

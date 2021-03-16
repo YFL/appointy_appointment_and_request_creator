@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AppointmentRequestWidget</class>
- <widget class="QWidget" name="AppointmentRequestWidget">
+ <class>AppointmentConfigurationWidget</class>
+ <widget class="QWidget" name="AppointmentConfigurationWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

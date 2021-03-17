@@ -122,5 +122,5 @@ void AppointmentWidget::on_request_duration_btn_clicked()
         return;
     }
 
-    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::duration_of_config({appointment_configuration->configuration.service_id, appointment_configuration->configuration.configuration}, "mongodb://localhost", "appointy_db").completion_time.to_string()).c_str());
+    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::compute_estimated_duration_of_config({appointment_configuration->configuration.service_id, appointment_configuration->configuration.configuration}, "mongodb://localhost", "appointy_db").completion_time.to_string()).c_str());
 }

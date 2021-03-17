@@ -176,6 +176,6 @@ void AppointmentConfigurationWidget::on_request_duration_btn_clicked()
         return;
     }
 
-    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::duration_of_config(appointy::ServiceConfiguration {_service_config_widget->service_id(), _service_config_widget->configuration()}, "mongodb://localhost", "appointy_db").completion_time.to_string()).c_str());
+    ui->estimated_duration_label->setText(("Estimated duration: " + appointy::compute_estimated_duration_of_config(appointy::ServiceConfiguration {_service_config_widget->service_id(), _service_config_widget->configuration()}, "mongodb://localhost", "appointy_db").completion_time.to_string()).c_str());
     ui->estimated_duration_label->adjustSize();
 }
